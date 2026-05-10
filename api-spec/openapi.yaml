@@ -1,0 +1,45 @@
+openapi: 3.1.0
+
+info:
+  title: EnergyTrack API
+  version: 0.0.1
+  description: |
+    API para gerenciamento de consumo energético de clientes industriais.
+  contact:
+    name: Matheus Massari
+
+servers:
+  - url: http://localhost:8080
+    description: Local development
+
+tags:
+  - name: Health
+    description: Endpoints de monitoramento operacional
+
+paths:
+  /api/v1/health:
+    get:
+      operationId: getHealth
+      summary: Verifica se a API está operacional
+      tags:
+        - Health
+      responses:
+        '200':
+          description: API está saudável
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum: [UP, DOWN]
+          description: Estado atual da API
+          examples: [UP]

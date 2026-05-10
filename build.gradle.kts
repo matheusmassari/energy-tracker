@@ -1,7 +1,10 @@
+import org.openapitools.generator.gradle.plugin.tasks.ValidateTask
+
 plugins {
     java
-    id("org.springframework.boot") version "3.5.14"
-    id("io.spring.dependency-management") version "1.1.7"
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spring.dependency.management)
+    alias(libs.plugins.openapi.generator)
 }
 
 group = "com.massari"
@@ -14,26 +17,75 @@ java {
     }
 }
 
-repositories {
-    mavenCentral()
-}
-
-extra["springModulithVersion"] = "1.4.11"
-
 dependencies {
-    implementation("org.springframework.modulith:spring-modulith-starter-core")
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.modulith:spring-modulith-starter-test")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    // Web + Actuator + Validation + JPA
+    implementation(libs.bundles.spring.app)
+
+    // Persistência (driver e Flyway plugin DB ficam só em runtime)
+    implementation(libs.flyway.core)
+    runtimeOnly(libs.flyway.postgresql)
+    runtimeOnly(libs.postgresql)
+
+    // Spring Modulith
+    implementation(libs.spring.modulith.starter.core)
+    implementation(libs.spring.modulith.starter.jpa)
+
+    // Dev
+    developmentOnly(libs.spring.boot.devtools)
+
+    // Testes
+    testImplementation(libs.bundles.testing.integration)
+    testRuntimeOnly(libs.junit.platform.launcher)
+
+    // API documentation / Swagger UI
+    implementation(libs.springdoc.openapi.starter.webmvc.ui)
 }
 
 dependencyManagement {
     imports {
-        mavenBom("org.springframework.modulith:spring-modulith-bom:${property("springModulithVersion")}")
+        mavenBom(libs.spring.modulith.bom.get().toString())
+        mavenBom(libs.testcontainers.bom.get().toString())
     }
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+val openApiSpec = layout.projectDirectory.file("api-spec/openapi.yaml")
+
+openApiGenerate {
+    generatorName.set("spring")
+    inputSpec.set(openApiSpec.asFile.absolutePath)
+    outputDir.set(layout.buildDirectory.dir("generated/openapi").get().asFile.absolutePath)
+    apiPackage.set("com.massari.energytracker.api.generated")
+    modelPackage.set("com.massari.energytracker.api.generated.model")
+    configOptions.set(
+        mapOf(
+            "interfaceOnly" to "true",
+            "useSpringBoot3" to "true",
+            "useJakartaEe" to "true",
+            "useTags" to "true",
+            "skipDefaultInterface" to "true",
+            "openApiNullable" to "false",
+            "dateLibrary" to "java8",
+            "useBeanValidation" to "true",
+        )
+    )
+}
+
+tasks.named<ValidateTask>("openApiValidate") {
+    inputSpec.set(openApiSpec.asFile.absolutePath)
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir(layout.buildDirectory.dir("generated/openapi/src/main/java"))
+        }
+    }
+}
+
+tasks.named("compileJava") {
+    dependsOn("openApiGenerate")
 }

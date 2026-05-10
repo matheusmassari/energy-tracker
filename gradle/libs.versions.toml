@@ -1,0 +1,53 @@
+[versions]
+spring-boot = "3.5.14"
+spring-dependency-management = "1.1.7"
+spring-modulith = "1.4.11"
+openapi-generator = "7.10.0"
+flyway = "10.20.1"
+postgresql = "42.7.4"
+testcontainers = "1.20.4"
+springdoc = "2.7.0"
+
+[libraries]
+# Spring Boot starters
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
+spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
+spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security" }
+spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+
+# Spring Modulith
+spring-modulith-starter-core = { module = "org.springframework.modulith:spring-modulith-starter-core" }
+spring-modulith-starter-jpa = { module = "org.springframework.modulith:spring-modulith-starter-jpa" }
+spring-modulith-starter-test = { module = "org.springframework.modulith:spring-modulith-starter-test" }
+spring-modulith-bom = { module = "org.springframework.modulith:spring-modulith-bom", version.ref = "spring-modulith" }
+
+# Persistence
+flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
+flyway-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+
+# Testcontainers
+testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "testcontainers" }
+testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter" }
+testcontainers-postgresql = { module = "org.testcontainers:postgresql" }
+
+# JUnit Platform Launcher
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+
+# OpenAPI / Swagger UI
+springdoc-openapi-starter-webmvc-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
+
+[bundles]
+# starters de runtime usados em todo módulo de aplicação
+spring-app = ["spring-boot-starter-web", "spring-boot-starter-data-jpa", "spring-boot-starter-validation", "spring-boot-starter-actuator"]
+
+# stack de teste de integração
+testing-integration = ["spring-boot-starter-test", "spring-modulith-starter-test", "testcontainers-junit-jupiter", "testcontainers-postgresql"]
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
+openapi-generator = { id = "org.openapi.generator", version.ref = "openapi-generator" }
