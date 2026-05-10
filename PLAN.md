@@ -231,21 +231,21 @@ com.energytrack
 
 Tarefas:
 
-- [ ] Criar repositório no GitHub com `.gitignore` apropriado para Gradle/Java/IntelliJ.
-- [ ] Escrever `settings.gradle.kts` à mão.
-- [ ] Escrever `build.gradle.kts` com Kotlin DSL, à mão.
-- [ ] Configurar `gradle/libs.versions.toml` (version catalog).
-- [ ] Adicionar Spring Boot, Modulith, JPA, Web, Security, Validation, Actuator.
-- [ ] Adicionar `openapi-generator-gradle-plugin` e validador da spec.
-- [ ] Criar estrutura `api-spec/` com `openapi.yaml` mínimo (info + um path `/health`).
-- [ ] Configurar tasks Gradle: `openApiValidate`, `openApiGenerate`.
-- [ ] Garantir que `compileJava` depende de `openApiGenerate`.
+- [x] Criar repositório no GitHub com `.gitignore` apropriado para Gradle/Java/IntelliJ.
+- [x] Escrever `settings.gradle.kts` à mão.
+- [x] Escrever `build.gradle.kts` com Kotlin DSL, à mão.
+- [x] Configurar `gradle/libs.versions.toml` (version catalog).
+- [x] Adicionar Spring Boot, Modulith, JPA, Web, Validation, Actuator. *(Security adiada para Fase 3 — declarar a dep agora bloqueia `/health` e `/swagger-ui` por default.)*
+- [x] Adicionar `openapi-generator-gradle-plugin` e validador da spec.
+- [x] Criar estrutura `api-spec/` com `openapi.yaml` mínimo (info + um path `/health`).
+- [x] Configurar tasks Gradle: `openApiValidate`, `openApiGenerate`.
+- [x] Garantir que `compileJava` depende de `openApiGenerate`.
 - [ ] Configurar `application.yml` com profiles `dev`, `test`, `prod`.
 - [ ] Subir PostgreSQL via `docker-compose.yml` (com pgAdmin opcional).
 - [ ] Configurar Flyway com migration `V001__init.sql` vazia.
-- [ ] Criar classe principal `EnergyTrackApplication`.
+- [x] Criar classe principal `EnergyTrackApplication`. *(Gerada pelo Spring Initializr como `EnergyTrackerApplication` em `com.massari.energytracker`.)*
 - [ ] Implementar `/health` próprio usando a interface gerada da spec.
-- [ ] Configurar Swagger UI servindo a spec em `/swagger-ui.html` (springdoc só para servir a UI — sem usar para gerar a spec).
+- [ ] Configurar Swagger UI servindo a spec em `/swagger-ui.html` (springdoc só para servir a UI — sem usar para gerar a spec). *(Dep `springdoc-openapi-starter-webmvc-ui` já no classpath; falta apontar para spec estática.)*
 - [ ] Validar: `./gradlew bootRun` sobe a aplicação, conecta no Postgres, `/swagger-ui.html` mostra a spec.
 
 **Conceitos a revisar:** lifecycle do Gradle, autoconfiguração do Spring Boot, profiles, `DataSource`, Flyway baseline, OpenAPI 3.1 estrutura básica, `$ref`.
